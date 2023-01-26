@@ -23,7 +23,7 @@ function draw() {
     system.run();
 }
 
-class Particle {
+class ParticleEllipse {
     constructor(position) {
         this.acceleration = createVector(0, 0.1);
         this.velocity = createVector(random(-1, 1), random(-1, 0));
@@ -54,6 +54,37 @@ class Particle {
     }
 }
 
+class ParticleSquare {
+    constructor(position) {
+        this.acceleration = createVector(0, 0.1);
+        this.velocity = createVector(random(-1, 1), random(-1, 0));
+        this.position = position.copy();
+        this.lifespan = 255;
+        this.state = 0;
+    }
+
+    run() {
+        this.update();
+        this.display();  
+    }
+
+    update() {
+        this.velocity.add(this.acceleration);
+        this.position.add(this.velocity);
+        this.lifespan -= 2;
+    }
+
+    display() {
+        stroke(200, this.lifespan);
+        fill(127, this.lifespan);
+        rect(this.position.x, this.position.y, 12, 12);
+    }  
+
+    isDead() {
+        return this.lifespan < 0;
+    }
+}
+
 class ParticleSystem {
     constructor(position) {
         this.origin = position.copy();
@@ -61,7 +92,8 @@ class ParticleSystem {
     }
     
     addParticle() {
-        this.particles.push(new Particle(this.origin));
+        this.particles.push(new ParticleEllipse(this.origin));
+        this.particles.push(new ParticleSquare(this.origin));
     }
 
     run() {
