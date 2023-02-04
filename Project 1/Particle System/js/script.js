@@ -4,105 +4,110 @@ Author Name: Jaden Thompson
 */
 
 "use strict";
-let system;
+let particleSystem;
 
 /*
 Description of setup
 */
 function setup() {
-    createCanvas(500, 500);
-    system = new ParticleSystem(createVector(width / 2, 50));
+    createCanvas(windowWidth + 50, windowHeight + 50);
+    particleSystem = new ParticleSystem();
 }
 
 /*
 Description of draw()
 */
 function draw() {
-    background(51);
-    system.addParticle();
-    system.run();
+    clear();
+    background(0);
+    blendMode(ADD);
+    particleSystem.update();
+    particleSystem.display();
 }
 
-class ParticleEllipse {
-    constructor(position) {
-        this.acceleration = createVector(0, 0.1);
-        this.velocity = createVector(random(-1, 1), random(-1, 0));
-        this.position = position.copy();
-        this.lifespan = 255;
-        this.state = 0;
+function mousePressed() {
+    for (let i = 0; i <= 100; i++) {
+      particleSystem.addParticle();
     }
+}
 
-    run() {
-        this.update();
-        this.display();  
+class Particle {
+    constructor() {
+      this.x = random(width)
+      this.y = random(height);
+      this.speed = random(1, 1.5);
+      this.life = random(500, 1000);
+      this.color = [255, 255, 100];
+      this.size = 10;
     }
-
-    update() {
-        this.velocity.add(this.acceleration);
-        this.position.add(this.velocity);
-        this.lifespan -= 2;
+  
+    move() {
+      this.x += random(-this.speed, this.speed);
+      this.y += random(-this.speed, this.speed);
+      this.life -= 1;
     }
-
+  
     display() {
-        stroke(200, this.lifespan);
-        fill(127, this.lifespan);
-        ellipse(this.position.x, this.position.y, 12, 12);
-    }  
-
-    isDead() {
-        return this.lifespan < 0;
+      noStroke();
+      fill(this.color[0], this.color[1], this.color[2], this.life);
+      ellipse(this.x, this.y, this.size, this.size);
     }
-}
-
-class ParticleSquare {
-    constructor(position) {
-        this.acceleration = createVector(0, 0.1);
-        this.velocity = createVector(random(-1, 1), random(-1, 0));
-        this.position = position.copy();
-        this.lifespan = 255;
-        this.state = 0;
+  }
+  
+  class Spark extends Particle {
+    constructor(x, y) {
+      super(x, y);
+      this.thresh = 50;
     }
-
-    run() {
-        this.update();
-        this.display();  
-    }
-
+  
     update() {
-        this.velocity.add(this.acceleration);
-        this.position.add(this.velocity);
-        this.lifespan -= 2;
+      this.move();
+      this.display();
+      this.check();
     }
 
-    display() {
-        stroke(200, this.lifespan);
-        fill(127, this.lifespan);
-        rect(this.position.x, this.position.y, 12, 12);
-    }  
-
-    isDead() {
-        return this.lifespan < 0;
-    }
-}
-
-class ParticleSystem {
-    constructor(position) {
-        this.origin = position.copy();
-        this.particles = [];
-    }
-    
-    addParticle() {
-        this.particles.push(new ParticleEllipse(this.origin));
-        this.particles.push(new ParticleSquare(this.origin));
-    }
-
-    run() {
-        for (let i = this.particles.length-1; i >= 0; i--) {
-            let p = this.particles[i];
-            p.run();
-            if (p.isDead()) {
-              this.particles.splice(i, 1);
-            }
+    check() {
+      if (dist(this.x, this.y, mouseX, mouseY) <= this.thresh) {
+        this.color[1] = this.color[1] -= 5;
+        this.color[2] = this.color[2] -= 5;
+        this.life = this.life += 50;
+        if (this.size <= 250) {
+          this.size = this.size += 5;
         }
+      } else if (dist(this.x, this.y, mouseX, mouseY) >= this.thresh) {
+        this.color[1] = this.color[1] += 0.05;
+        this.color[2] = this.color[2] += 0.05;
+        if (this.size >= 250) {
+          this.size = this.size -= 2;
+        }
+      }
     }
-}
+  }
+
+  class ParticleSystem {
+    constructor() {
+      this.particles = [];
+    }
+  
+    addParticle(x, y) {
+      this.particles.push(new Spark(x, y));
+    }
+  
+    update() {
+      for (let i = 0; i < this.particles.length; i++) {
+        let p = this.particles[i];
+        p.update();
+  
+        if (p.life <= 0) {
+          this.particles.splice(i, 1);
+          i--;
+        } 
+      }
+    }
+  
+    display() {
+      for (let p of this.particles) {
+        p.display();
+      }
+    }
+  }
