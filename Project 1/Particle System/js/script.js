@@ -71,14 +71,14 @@ class Particle {
         this.color[1] = this.color[1] -= 5;
         this.color[2] = this.color[2] -= 5;
         this.life = this.life += 50;
-        if (this.size <= 250) {
+        if (this.size <= 150) {
           this.size = this.size += 5;
         }
       } else if (dist(this.x, this.y, mouseX, mouseY) >= this.thresh) {
         this.color[1] = this.color[1] += 0.05;
         this.color[2] = this.color[2] += 0.05;
-        if (this.size >= 250) {
-          this.size = this.size -= 2;
+        if (this.size > 10 && this.size <= 150) {
+          this.size = this.size -= 5;
         }
       }
     }
