@@ -55,7 +55,7 @@ class Particle {
     move() {
       this.x += random(-this.speed, this.speed);
       this.y += random(-this.speed, this.speed);
-      this.life -= 3;
+      this.life -= 2;
     }
   
     display() {
@@ -95,7 +95,7 @@ Variables: super position takes the x, y from the original particle class, and t
         if (this.size <= 150) {
           this.size = this.size += 5;
         }
-        if (this.speed <= 3) {
+        if (this.speed <= 2) {
           this.speed = this.speed + 0.5;
         }
       } else if (dist(this.x, this.y, mouseX, mouseY) >= this.thresh) {
