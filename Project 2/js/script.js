@@ -1,7 +1,7 @@
 let table;
 let song;
 let points = [];
-let wordObject;
+let wordObject = [];
 
 function preload() {
   table = loadTable("assets/archive/2019.csv", "csv", "header");
@@ -9,7 +9,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth + 50, windowHeight + 50, WEBGL);
+  createCanvas(1795, 931, WEBGL);
   background(0);
   userStartAudio();
   if (song != song.isPlaying()){
@@ -29,22 +29,32 @@ function setup() {
                                 table.getString(r, 0));
                                 // Pass through the values in each row
   }
-  wordObject = createWord3D(
-    string = "Are you happy?",       // The actual character that you want to draw (anything that can be passed into "text()")
-    depth = 10,        // How thick the 3D rendered letter is (i.e. how many cube pixels of size "size" it is on z-axis)  
-    size = 1,         // The size of a unit "box()" making up part of the letter  
-    resolution = 20,   // The size of the canvas it renders the letter on (higher is more detailed, 20-30 is a good range)  
-    bevelled = false,     // [OPTIONAL, default = true] Gives the bevelled, embossed 3D look (as seen in screenshot)  
-    font = "Georgia",         // [OPTIONAL, default = "Georgia"] Gives the font uses, can be any default ones or anything added  
-    style = "NORMAL"         // [OPTIONAL, default = BOLD] Gives the chosen style out of BOLD, NORMAL, ITALIC  
-  )
+  for(var i = 0; i < 12; i++){
+  wordObject[i] = createWord3D(
+      string = "Are you happy?",       // The actual character that you want to draw (anything that can be passed into "text()")
+      depth = 10,        // How thick the 3D rendered letter is (i.e. how many cube pixels of size "size" it is on z-axis)  
+      size = 1,         // The size of a unit "box()" making up part of the letter  
+      resolution = 20,   // The size of the canvas it renders the letter on (higher is more detailed, 20-30 is a good range)  
+      bevelled = false,     // [OPTIONAL, default = true] Gives the bevelled, embossed 3D look (as seen in screenshot)  
+      font = "Georgia",         // [OPTIONAL, default = "Georgia"] Gives the font uses, can be any default ones or anything added  
+      style = "NORMAL"         // [OPTIONAL, default = BOLD] Gives the chosen style out of BOLD, NORMAL, ITALIC  
+    )
+  }
 }
 
 function draw() {
-  push();
-  translate(-600, -300, 0);
-  wordObject.show();
-  pop();
+  for(var i = 0; i < 6; i++){
+    push();
+    translate(-600, -300 + (100 * i), 0);
+    wordObject[i].show();
+    pop();
+  }
+  for(var i = 6; i < 12; i++){
+    push();
+    translate(600, -900 + (100 * i), 0);
+    wordObject[i].show();
+    pop();
+  }
   for (var i = 0; i < table.getRowCount(); i++){
     points[i].drawHappy();
   }
@@ -70,5 +80,3 @@ class DataPoint {
       pop();
     }
 }
-
-
