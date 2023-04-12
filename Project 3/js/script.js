@@ -142,7 +142,6 @@ function draw() {
         synth[myVida.activeZones[i].id].amp(
           0.1 * myVida.activeZones[i].isMovementDetectedFlag
         );
-        ringOffset = myVida.activeZones[i].isMovementDetectedFlag * 10;
       }
     }
     pop();
@@ -150,46 +149,46 @@ function draw() {
     push();
     rotateZ(frameCount / 5);
 
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = 400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = -400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = 0;
     offsetY = 400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = 400;
     offsetY = 400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = -400;
     offsetY = 400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = -400;
     offsetY = -400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = 0;
     offsetY = -400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
 
     offsetX = 400;
     offsetY = -400;
-    waves(offsetX, offsetY, ringOffset);
+    waves(offsetX, offsetY);
     pop();
   }
 }
 
-function waves(offsetX, offsetY, ringOffset) {
+function waves(offsetX, offsetY) {
   noFill();
   stroke(255);
 
-  for (let i = 0; i < 5 + ringOffset; i++) {
+  for (let i = 0; i < 25; i++) {
     var r = map(sin(frameCount / 2), -1, 1, 100, 200);
     var g = map(i, 0, 20, 0, 255);
     var b = map(cos(frameCount), -1, 1, 255, 0);
