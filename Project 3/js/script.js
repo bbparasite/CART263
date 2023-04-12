@@ -3,6 +3,7 @@
  * Title: Playful Interaction Testing
  * Course: CART263
  * Testing out Vida as a possible route
+ * My version uses Vida to control a synth with active zone (motion detection)
  */
 
 var myCapture, // camera
